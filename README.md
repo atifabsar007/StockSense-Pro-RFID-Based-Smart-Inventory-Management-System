@@ -1,23 +1,111 @@
-📦 StockSense Pro
+StockSense Pro
+RFID-Based Smart Inventory Management System with Security & Usage Analytics
 
-RFID-based smart inventory management system built using ESP32, designed to automate stock tracking, enhance security, and provide real-time analytics.
+StockSense Pro is a smart, embedded inventory management system that automates stock tracking, enhances warehouse security, and provides real-time usage analytics. Built around the ESP32 microcontroller, it combines RFID-based product identification, password-protected access control, low-stock alerts, and activity logging into a compact, low-cost solution.
 
-StockSense Pro replaces manual inventory systems with an RFID-driven automated solution, featuring role-based authentication, OLED dashboard UI, and real-time stock logging with RTC timestamps.
-
-Originally built on Arduino Uno, it was upgraded to ESP32 for better performance, memory efficiency, and future IoT scalability.
+Originally prototyped on Arduino Uno, the system was upgraded to ESP32 to overcome memory and performance limitations.
 
 🚀 Features
+🔐 Secure Access – Admin and staff login with 4-digit password authentication
 
-RFID-based product tracking
-Admin & Staff login with password security
-Real-time stock updates with DS3231 RTC
-OLED-based interactive dashboard
-Low-stock alerts (buzzer + LED)
-Sales & usage analytics
-🛠️ Tech Stack
+🆔 RFID Product Identification – Assign unique RFID tags to products
 
-ESP32, RFID (RC522), OLED Display, RTC Module, Arduino IDE, C/C++
+📦 Automated Stock Management – Auto-updates stock-in/out with timestamps
 
-🔮 Future Scope
+📊 Real-Time Analytics – Track total sold, remaining stock, and best-selling products
 
-Cloud integration, IoT dashboard, biometric login, and AI-based stock prediction.
+🖥️ OLED Display Interface – Intuitive 128x64 user menu
+
+⏰ Date/Time Logging – RTC DS3231 module records all inventory activities
+
+🚨 Low-Stock Alerts – Buzzer + LED warnings
+
+📈 Customer Favorite Detection – Identifies top-selling products
+
+🔁 Scalable Design – Ready for future IoT integration
+
+🧰 Components Used
+Component	Quantity	Purpose
+ESP32 Dev Board	1	Main controller
+RC522 RFID Module	1	RFID card reading
+RFID Cards/Tags	4+	Product identification
+OLED Display (128x64)	1	User interface
+RTC DS3231 Module	1	Date & time tracking
+4x4 Matrix Keypad	1	Password & menu input
+Active Buzzer	1	Audio alerts
+Yellow LED	1	Visual warning
+Breadboard & Jumpers	-	Circuit connections
+USB Power Supply	1	System power
+🛠️ Software & Libraries
+Library / Tool	Purpose
+Arduino IDE	Development environment
+MFRC522	RFID communication
+RTClib	RTC module control
+Adafruit SSD1306	OLED display control
+Adafruit GFX	Graphics support
+Keypad Library	Matrix keypad input
+Wire / SPI	I2C & SPI communication
+⚙️ Working Principle
+Initialization – ESP32 boots up, initializes all modules, and displays the login menu on OLED.
+
+Authentication – User selects Admin or Staff mode and enters a 4-digit password.
+
+RFID Scanning – After login, RFID tags are scanned to identify products.
+
+Stock Update – Stock quantity and sold counters update automatically with timestamp.
+
+Analytics – System generates total stock, sold count, favorite product, and low-stock alerts.
+
+🔒 Security Features
+Role-based access (Admin / Staff)
+
+Password authentication
+
+Unknown RFID tag detection
+
+Audio + visual alerts for unauthorized access
+
+📉 Limitations & Future Scope
+Current Limitations
+No persistent storage (data lost on power failure)
+
+Limited RFID read range
+
+No cloud or internet connectivity
+
+No mobile app support
+
+Future Improvements
+☁️ Cloud database (Firebase / AWS)
+
+📱 Mobile app control
+
+📊 Wi-Fi dashboard
+
+🔐 Fingerprint authentication
+
+📧 Email / SMS low-stock alerts
+
+🤖 AI-based demand prediction
+
+🏢 Applications
+Retail shops and smart stores
+
+Warehouses and logistics
+
+Laboratories and libraries
+
+Hospitals and educational institutions
+
+👨‍💻 Authors
+Developed as an embedded systems project to demonstrate smart, secure, and scalable inventory management using RFID and ESP32.
+
+📜 License
+This project is licensed under the MIT License – feel free to use, modify, and distribute.
+
+⭐ Acknowledgments
+Arduino & ESP32 communities
+
+Library contributors (MFRC522, RTClib, Adafruit)
+
+Note: This project was successfully migrated from Arduino Uno to ESP32 for improved memory, speed, and future scalability.
