@@ -7,6 +7,7 @@ StockSense Pro replaces manual inventory systems with an RFID-driven automated s
 Originally built on Arduino Uno, it was upgraded to ESP32 for better performance, memory efficiency, and future IoT scalability.
 
 🚀 Features
+
 RFID-based product tracking
 Admin & Staff login with password security
 Real-time stock updates with DS3231 RTC
