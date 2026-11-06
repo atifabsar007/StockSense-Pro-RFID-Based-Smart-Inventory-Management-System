@@ -401,69 +401,69 @@ int waitForCard(unsigned long timeoutMs) {
 // ═════════════════════════ CARD SCAN ════════════════════════════
 
 void handleCardScan(int productIdx) {
-  String ts   = getTimeStr();
+  // Validate the index before using it to access product arrays.
+  if (productIdx < 0 || productIdx >= NUM_PRODUCTS) {
+    beepError();
+    oledShow("SCAN ERROR", "UNKNOWN PRODUCT");
+    Serial.println("[ERROR] Invalid product index; inventory unchanged.");
+    delay(1500);
+    return;
+  }
+
+  // A scan represents a stock-out. It must never create stock automatically.
+  if (stock[productIdx] <= 0) {
+    beepError();
+    oledClear();
+    display.setTextSize(1);
+    display.setCursor(0, 0); display.println("OUT OF STOCK");
+    display.drawLine(0, 10, 127, 10, WHITE);
+    display.setCursor(0, 24); display.println(productNames[productIdx]);
+    display.setCursor(0, 42); display.println("Ask admin to restock");
+    display.display();
+
+    Serial.print("[OUT OF STOCK] ");
+    Serial.println(productNames[productIdx]);
+    delay(2500);
+    return;
+  }
+
+  String ts = getTimeStr();
   String date = getDateStr();
 
-  if (stock[productIdx] == 0) {
-    // Auto stock-in if stock was 0
-    stock[productIdx]++;
+  // Decrement only when a valid product has available stock.
+  stock[productIdx]--;
+  soldCount[productIdx]++;
 
-    oledClear();
-    display.setTextSize(1);
-    display.setCursor(0, 0);  display.println("AUTO STOCK IN");
-    display.drawLine(0, 10, 127, 10, WHITE);
-    display.setCursor(0, 18); display.println(productNames[productIdx]);
-    display.setCursor(0, 32); display.println("Stock Was 0");
-    display.setCursor(0, 44); display.println(date);
-    display.setCursor(0, 56); display.println(ts);
-    display.display();
+  oledClear();
+  display.setTextSize(1);
+  display.setCursor(0, 0); display.println("STOCK OUT");
+  display.drawLine(0, 10, 127, 10, WHITE);
+  display.setCursor(0, 18); display.println(productNames[productIdx]);
+  display.setCursor(0, 32);
+  display.print("Remaining: "); display.println(stock[productIdx]);
+  display.setCursor(0, 44); display.println(date);
+  display.setCursor(0, 56); display.println(ts);
+  display.display();
 
-    beepOK();
+  beepOK();
 
-    Serial.print("[AUTO STOCK IN] ");
-    Serial.print(productNames[productIdx]);
-    Serial.print(" | Stock: "); Serial.print(stock[productIdx]);
-    Serial.print(" | "); Serial.print(date);
-    Serial.print(" "); Serial.println(ts);
+  Serial.print("[STOCK OUT] ");
+  Serial.print(productNames[productIdx]);
+  Serial.print(" | Remaining: "); Serial.print(stock[productIdx]);
+  Serial.print(" | "); Serial.print(date);
+  Serial.print(" "); Serial.println(ts);
 
-    delay(3000);
+  delay(3000);
 
-  } else {
-    // Normal stock-out
-    stock[productIdx]--;
-    soldCount[productIdx]++;
-
-    oledClear();
-    display.setTextSize(1);
-    display.setCursor(0, 0);  display.println("STOCK OUT");
-    display.drawLine(0, 10, 127, 10, WHITE);
-    display.setCursor(0, 18); display.println(productNames[productIdx]);
-    display.setCursor(0, 32);
-    display.print("Remaining: "); display.println(stock[productIdx]);
-    display.setCursor(0, 44); display.println(date);
-    display.setCursor(0, 56); display.println(ts);
-    display.display();
-
-    beepOK();
-
-    Serial.print("[STOCK OUT] ");
-    Serial.print(productNames[productIdx]);
-    Serial.print(" | Remaining: "); Serial.print(stock[productIdx]);
-    Serial.print(" | "); Serial.print(date);
-    Serial.print(" "); Serial.println(ts);
-
-    delay(3000);
-
-    if (stock[productIdx] == 1) {
-      oledShow(
-        "LOW STOCK ALERT",
-        productNames[productIdx],
-        "ONLY 1 LEFT"
-      );
-      Serial.print("[ALERT] Low stock: "); Serial.println(productNames[productIdx]);
-      lowStockBuzz();
-      delay(2500);
-    }
+  if (stock[productIdx] == 1) {
+    oledShow(
+      "LOW STOCK ALERT",
+      productNames[productIdx],
+      "ONLY 1 LEFT"
+    );
+    Serial.print("[ALERT] Low stock: "); Serial.println(productNames[productIdx]);
+    lowStockBuzz();
+    delay(2500);
   }
 }
 
