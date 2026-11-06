@@ -401,11 +401,20 @@ int waitForCard(unsigned long timeoutMs) {
 // ═════════════════════════ CARD SCAN ════════════════════════════
 
 void handleCardScan(int productIdx) {
+  // Validate the card-to-product mapping before indexing inventory arrays.
+  if (productIdx < 0 || productIdx >= NUM_PRODUCTS) {
+    beepError();
+    oledShow("SCAN ERROR", "UNKNOWN PRODUCT");
+    Serial.println("[ERROR] Invalid product index; inventory unchanged.");
+    delay(1500);
+    return;
+  }
+
   String ts   = getTimeStr();
   String date = getDateStr();
 
   if (stock[productIdx] == 0) {
-    // Auto stock-in if stock was 0
+    // Preserve the project's explicit zero-stock auto stock-in workflow.
     stock[productIdx]++;
 
     oledClear();
